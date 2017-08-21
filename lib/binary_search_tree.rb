@@ -67,19 +67,26 @@ class BinarySearchTree
 
 
   def max(working = @root)
-    working.right == nil ? { working.movie_title => working.rating } : max(working.right)
+    if working.right == nil
+      { working.movie_title => working.rating }
+    else
+      max(working.right)
+    end
   end
 
 
   def min(working = @root)
-    working.left == nil ? { working.movie_title => working.rating }  : min(working.left)
+    if working.left == nil
+      { working.movie_title => working.rating }
+    else
+      min(working.left)
+    end
   end
 
-
   def sort(working = @root, sorted_movies = [])
-    sort(working.left, sorted_movies) if working.left != nil
+    sort(working.left, sorted_movies) if working.left != nil #consider unless
     sorted_movies << { working.movie_title => working.rating }
-    sort(working.right, sorted_movies) if working.right !=nil
+    sort(working.right, sorted_movies) if working.right !=nil #consider unless
 
     sorted_movies
   end
@@ -92,44 +99,12 @@ class BinarySearchTree
 
     movie_list.each do |entry|
       rating, movie_title = entry.split(', ', 2)
-      insert_count += 1 if insert(rating.to_i, movie_title) != nil #could be considered unclear
+      insert_count += 1 if insert(rating.to_i, movie_title) != nil #consider unless
     end
     insert_count
   end
 
 end
-
-tree = BinarySearchTree.new
-tree.load("movies.txt")
-
-# create tree
-# tree.insert(12, "Title of Movie")
-# tree.insert(11, "Sequel")
-# tree.insert(13, "Prequel")
-# tree.insert(15, "New Max")
-# tree.insert(14, "Movie 14")
-
-
-# #test include
-puts "#{tree.include?(11)} <--- should be true"
-puts "#{tree.include?(12)} <--- should be true"
-puts "#{tree.include?(13)} <--- should be true"
-puts "#{tree.include?(101)} <--- should be false"
-
-#test depth_of
-puts "#{tree.depth_of(55)} <--- should be 2"
-puts "#{tree.depth_of(75)} <--- should be 2"
-puts "#{tree.depth_of(101)} <--- should be nil/empty"
-
-# test min and max
-puts "#{tree.min} <--- should be { 'Cruel Intentions' => 0 }"
-puts "#{tree.max} <--- should be { 'The Little Engine That Could' => 100 }"
-
-
-binding.pry
-# p tree.sort
-
-
 
 
 # def sort(working_tree = @root, movie_list = [])
