@@ -175,5 +175,16 @@ class BinarySearchTreeTest < Minitest::Test
     #write more tests
   end
 
+  def test_leaves_returns_the_number_of_leaves
+    tree = BinarySearchTree.new
+
+    tree.insert(10, "10 Movie")
+    tree.insert(100, "100 Movie")
+    tree.insert(3, "3 Movie")
+    tree.insert(5, "5 Movie")
+    tree.insert(1, "1 Movie")
+
+    assert_equal 3, tree.leaves
+  end
 
 end

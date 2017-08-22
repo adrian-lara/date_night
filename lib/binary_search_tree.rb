@@ -124,6 +124,18 @@ class BinarySearchTree
     status
   end
 
+  def leaves(current = @root, count = 0)
+    if current.left != nil
+        return leaves(current.left, count) if current.right.nil?
+        count = leaves(current.left, count)
+    end
+
+    if current.right != nil
+      return leaves(current.right, count)
+    end
+    count += 1
+  end
+
 end
 
 
