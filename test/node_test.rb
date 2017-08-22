@@ -1,4 +1,4 @@
-require './node.rb'
+require './lib/node.rb'
 require 'minitest/autorun'
 require 'minitest/pride'
 

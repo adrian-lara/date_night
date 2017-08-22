@@ -1,4 +1,4 @@
-require './binary_search_tree.rb'
+require './lib/binary_search_tree.rb'
 require 'minitest/autorun'
 require 'minitest/pride'
 
@@ -107,9 +107,10 @@ class BinarySearchTreeTest < Minitest::Test
     tree.insert(100, "100 Movie")
     tree.insert(3, "3 Movie")
     tree.insert(5, "5 Movie")
+    tree.insert(1, "1 Movie")
 
     assert_instance_of Array, tree.sort
-    assert_equal [{"3 Movie"=>3 },{"5 Movie"=>5},{"10 Movie"=>10},{"100 Movie"=>100}], tree.sort
+    assert_equal [{"1 Movie"=>1},{"3 Movie"=>3},{"5 Movie"=>5},{"10 Movie"=>10},{"100 Movie"=>100}], tree.sort
   end
 
   def test_load_returns_total_inserted_entries_of_file
@@ -119,6 +120,7 @@ class BinarySearchTreeTest < Minitest::Test
   end
 
   def test_health_returns_rating_and_child_count_and_floored_percentage_of_depth
+    skip
     tree = BinarySearchTree.new
 
     tree.insert(98, "Animals United")
@@ -133,6 +135,31 @@ class BinarySearchTreeTest < Minitest::Test
     assert_equal tree.health(1), [[58, 6, 85]]
     assert_equal tree.health(2), [[36, 2, 28], [93, 3, 42]]
   end
+
+  def test_integration_of_various_methods
+    tree = BinarySearchTree.new
+
+    assert_equal tree.insert(50, "50 Movie"), 0
+    assert_equal tree.insert(45, "45 Movie"), 1
+    assert_equal tree.insert(46, "46 Movie"), 2
+
+    assert tree.include?(50)
+    assert tree.include?(45)
+    assert tree.include?(46)
+    refute tree.include?(47)
+
+    assert_equal tree.depth_of(50), 0
+    assert_equal tree.depth_of(45), 1
+    assert_equal tree.depth_of(46), 2
+    assert_nil tree.depth_of(2)
+
+    assert_equal tree.max, {"50 Movie"=>50}
+    assert_equal tree.min, {"45 Movie"=>45}
+
+    assert_equal tree.load("movies.txt"), 96
+    #write more tests
+  end
+
 
 end
 
