@@ -3,6 +3,8 @@ require './node.rb'
 
 class BinarySearchTree
 
+  attr_reader :root
+
   def initialize()
     @root = nil
   end
@@ -10,7 +12,6 @@ class BinarySearchTree
 
   def create_root(rating, movie_title)
     @root = Node.new(rating, movie_title)
-    @root.depth
   end
 
 
@@ -20,7 +21,10 @@ class BinarySearchTree
   # definitely can split out nested ifs in the if statement
   #   (would just have to iterate insert from within a different method?)
   def insert(rating, movie_title, working = @root, working_depth = 0)
-    return create_root(rating, movie_title) if working == nil
+    if working == nil
+      create_root(rating, movie_title)
+      return @root.depth
+    end
 
     working_depth += 1
 

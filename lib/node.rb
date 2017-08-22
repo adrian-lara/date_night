@@ -15,7 +15,6 @@ class Node
     @depth = 0
     @left = nil
     @right = nil
-    @parent = nil #delete later if not using**************
   end
 
 
