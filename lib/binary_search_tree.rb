@@ -101,10 +101,27 @@ class BinarySearchTree
     insert_count
   end
 
+  def count_children(current = @root, count = 0)
+    count += 1
+    count = count_children(current.left, count) unless current.left.nil?
+    count = count_children(current.right, count) unless current.right.nil?
+    count
+  end
+
   def health(depth, current = @root, status = [])
+    total = count_children
 
+    if depth == current.depth
+      children = count_children(current)
+      pct_of_total = (children.to_f/total * 100).to_i
+      return status << [current.rating, children, pct_of_total]
+    elsif current.left != nil
+      health(depth, current.left, status)
+    end
 
+    health(depth, current.right, status) unless current.right.nil?
 
+    status
   end
 
 end

@@ -119,8 +119,23 @@ class BinarySearchTreeTest < Minitest::Test
     assert_equal tree.load("movies.txt"), 99
   end
 
+  def test_count_children_counts_self_and_children
+    tree = BinarySearchTree.new
+
+    tree.insert(98, "Animals United")
+    assert_equal 1, tree.count_children(tree.root)
+
+    tree.insert(58, "Armageddon")
+    assert_equal 2, tree.count_children(tree.root)
+
+    tree.insert(36, "Bill & Ted's Bogus Journey")
+    assert_equal 3, tree.count_children(tree.root)
+
+    tree.insert(93, "Bill & Ted's Excellent Adventure")
+    assert_equal 4, tree.count_children(tree.root)
+  end
+
   def test_health_returns_rating_and_child_count_and_floored_percentage_of_depth
-    skip
     tree = BinarySearchTree.new
 
     tree.insert(98, "Animals United")
@@ -131,9 +146,9 @@ class BinarySearchTreeTest < Minitest::Test
     tree.insert(38, "Charlie's Country")
     tree.insert(69, "Collateral Damage")
 
-    assert_equal tree.health(0), [[98, 7, 100]]
-    assert_equal tree.health(1), [[58, 6, 85]]
-    assert_equal tree.health(2), [[36, 2, 28], [93, 3, 42]]
+    assert_equal [[98, 7, 100]], tree.health(0)
+    assert_equal [[58, 6, 85]], tree.health(1)
+    assert_equal [[36, 2, 28], [93, 3, 42]], tree.health(2)
   end
 
   def test_integration_of_various_methods
@@ -162,16 +177,3 @@ class BinarySearchTreeTest < Minitest::Test
 
 
 end
-
-# #include this as integration test
-#   def test_insert_inserts_new_node
-#     tree = BinarySearchTree.new
-#
-#     tree.insert(5, "5 Movie")
-#     tree.insert(1, "1 Movie")
-#     tree.insert(3, "3 Movie")
-#
-#     #check if new nodes exist
-#     # => use other methods to "inspect"
-#     # => include
-#   end
