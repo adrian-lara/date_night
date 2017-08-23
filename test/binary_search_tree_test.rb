@@ -187,4 +187,38 @@ class BinarySearchTreeTest < Minitest::Test
     assert_equal 3, tree.leaves
   end
 
+  def test_return_larger_returns_the_larger_of_two_integers
+    tree = BinarySearchTree.new
+
+    assert_equal 2, tree.return_larger(1, 2)
+    assert_equal 5, tree.return_larger(5, 2)
+  end
+
+  def test_height_returns_height_of_tree
+    tree = BinarySearchTree.new
+
+    assert_equal 0, tree.height
+
+    tree.insert(10, "10 Movie")
+    assert_equal 1, tree.height
+
+    tree.insert(45, "100 Movie")
+    assert_equal 2, tree.height
+
+    tree.insert(3, "3 Movie")
+    assert_equal 2, tree.height
+
+    tree.insert(5, "5 Movie")
+    assert_equal 3, tree.height
+
+    tree.insert(50, "50 Movie")
+    assert_equal 3, tree.height
+
+    tree.insert(55, "50 Movie")
+    assert_equal 4, tree.height
+
+    tree.insert(52, "50 Movie")
+    assert_equal 5, tree.height
+  end
+
 end

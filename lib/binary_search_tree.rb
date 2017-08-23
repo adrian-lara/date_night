@@ -126,14 +126,27 @@ class BinarySearchTree
 
   def leaves(current = @root, count = 0)
     if current.left != nil
-        return leaves(current.left, count) if current.right.nil?
+        return leaves(current.left, count) if current.right == nil
         count = leaves(current.left, count)
     end
 
-    if current.right != nil
-      return leaves(current.right, count)
-    end
+    return leaves(current.right, count) if current.right != nil
     count += 1
+  end
+
+  def return_larger(first, second)
+    if first >= second then first else second end
+  end
+
+  def height(current = @root, current_height = 0, height_left = 0, height_right = 0)
+    return 0 if @root == nil
+
+    current_height += 1
+    height_left = height(current.left, current_height) unless current.left.nil?
+    height_right = height(current.right, current_height) unless current.right.nil?
+
+    greater_side = return_larger(height_left, height_right)
+    return_larger(current_height, greater_side)
   end
 
 end
