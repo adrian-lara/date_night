@@ -1,13 +1,10 @@
-require 'pry'
-
 class Node
 
   attr_accessor :rating,
                 :movie_title,
                 :depth,
                 :left,
-                :right,
-                :parent
+                :right
 
   def initialize(rating, movie_title)
     @rating = rating

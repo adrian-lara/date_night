@@ -1,4 +1,3 @@
-require 'pry'
 require './lib/node.rb'
 
 class BinarySearchTree
@@ -9,22 +8,25 @@ class BinarySearchTree
     @root = nil
   end
 
+  def populate_root(rating, movie_title)
+    @root = Node.new(rating, movie_title)
+  end
+
   def insert(rating, movie_title, current = @root, current_depth = 0)
     if @root.nil?
-      @root = Node.new(rating, movie_title)
+      populate_root(rating, movie_title)
       return @root.depth
     end
 
     current_depth += 1
-
     if rating < current.rating
-      enter_or_insert_left(rating, movie_title, current, current_depth)
+      insert_left(rating, movie_title, current, current_depth)
     elsif rating > current.rating
-      enter_or_insert_right(rating, movie_title, current, current_depth)
+      insert_right(rating, movie_title, current, current_depth)
     end
   end
 
-  def enter_or_insert_left(rating, movie_title, current, current_depth)
+  def insert_left(rating, movie_title, current, current_depth)
     if current.left != nil
       insert(rating, movie_title, current.left, current_depth)
     else
@@ -33,7 +35,7 @@ class BinarySearchTree
     end
   end
 
-  def enter_or_insert_right(rating, movie_title, current, current_depth)
+  def insert_right(rating, movie_title, current, current_depth)
     if current.right != nil
       insert(rating, movie_title, current.right, current_depth)
     else
@@ -57,7 +59,6 @@ class BinarySearchTree
 
   def depth_of(rating, current = @root)
     return nil if @root.nil?
-
     return current.depth if rating == current.rating
 
     if rating < current.rating && current.left != nil
@@ -106,26 +107,25 @@ class BinarySearchTree
     insert_count
   end
 
-  def count_children(current = @root, count = 0)
+  def count_self_and_children(current, count = 0)
     count += 1
-    count = count_children(current.left, count) unless current.left.nil?
-    count = count_children(current.right, count) unless current.right.nil?
+    count = count_self_and_children(current.left, count) unless current.left.nil?
+    count = count_self_and_children(current.right, count) unless current.right.nil?
     count
+  end
+
+  def node_health(node)
+    total_nodes = count_self_and_children(@root)
+    children = count_self_and_children(node)
+    pct_of_total = (children.to_f/total_nodes * 100).to_i
+    [node.rating, children, pct_of_total]
   end
 
   def health(depth, current = @root, status = [])
     return nil if @root.nil?
+    return status << node_health(current) if depth == current.depth
 
-    total = count_children
-
-    if depth == current.depth
-      children = count_children(current)
-      pct_of_total = (children.to_f/total * 100).to_i
-      return status << [current.rating, children, pct_of_total]
-    elsif current.left != nil
-      health(depth, current.left, status)
-    end
-
+    health(depth, current.left, status) unless current.left.nil?
     health(depth, current.right, status) unless current.right.nil?
 
     status
@@ -143,8 +143,8 @@ class BinarySearchTree
     count += 1
   end
 
-  def return_larger(first, second)
-    if first >= second then first else second end
+  def return_largest(first, second, third)
+    [first, second, third].sort[-1]
   end
 
   def height(current = @root, current_height = 0, height_left = 0, height_right = 0)
@@ -154,8 +154,7 @@ class BinarySearchTree
     height_left = height(current.left, current_height) unless current.left.nil?
     height_right = height(current.right, current_height) unless current.right.nil?
 
-    greater_side = return_larger(height_left, height_right)
-    return_larger(current_height, greater_side)
+    return_largest(current_height, height_left, height_right)
   end
 
 end

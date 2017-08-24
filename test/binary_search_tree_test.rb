@@ -10,19 +10,39 @@ class BinarySearchTreeTest < Minitest::Test
     assert_instance_of BinarySearchTree, tree
   end
 
+  def test_populate_root_creates_new_root_node
+    tree = BinarySearchTree.new
+    assert_nil tree.root
+    tree.populate_root(10, "10 Movie")
+
+    refute_nil tree.root
+  end
+
+  def test_insert_can_create_root_and_return_depth_zero
+    tree = BinarySearchTree.new
+
+    assert_equal 0, tree.insert(10, "10 Movie")
+  end
+
   def test_insert_inserts_new_node_and_returns_depth
     tree = BinarySearchTree.new
 
-    assert_equal tree.insert(10, "10 Movie"), 0
-    assert_equal tree.insert(3, "3 Movie"), 1
-    assert_equal tree.insert(5, "5 Movie"), 2
-    assert_equal tree.insert(57, "57 Movie"), 1
-    assert_equal tree.insert(65, "65 Movie"), 2
+    assert_equal 0, tree.insert(10, "10 Movie")
+    assert_equal 1, tree.insert(3, "3 Movie")
+    assert_equal 2, tree.insert(5, "5 Movie")
+    assert_equal 1, tree.insert(57, "57 Movie")
+    assert_equal 2, tree.insert(65, "65 Movie")
 
     assert_nil tree.insert(10, "10 Movie")
   end
 
-  def
+  def test_insert_returns_nil_if_rating_exists_in_tree
+    tree = BinarySearchTree.new
+
+    tree.insert(10, "10 Movie")
+
+    assert_nil tree.insert(10, "10 Movie")
+  end
 
   def test_include_checks_specific_node_existense
     tree = BinarySearchTree.new
@@ -118,23 +138,33 @@ class BinarySearchTreeTest < Minitest::Test
     assert_equal 99, tree.load("movies.txt")
   end
 
-  def test_count_children_counts_self_and_children
+  def test_count_self_and_children_counts_self_and_children
     tree = BinarySearchTree.new
 
     tree.insert(98, "Animals United")
-    assert_equal 1, tree.count_children(tree.root)
+    assert_equal 1, tree.count_self_and_children(tree.root)
 
     tree.insert(58, "Armageddon")
-    assert_equal 2, tree.count_children(tree.root)
+    assert_equal 2, tree.count_self_and_children(tree.root)
 
     tree.insert(36, "Bill & Ted's Bogus Journey")
-    assert_equal 3, tree.count_children(tree.root)
+    assert_equal 3, tree.count_self_and_children(tree.root)
 
     tree.insert(93, "Bill & Ted's Excellent Adventure")
-    assert_equal 4, tree.count_children(tree.root)
+    assert_equal 4, tree.count_self_and_children(tree.root)
   end
 
-  def test_health_returns_rating_and_child_count_and_floored_percentage_of_depth
+  def test_node_health_returns_health_status_array_at_specific_node
+    tree = BinarySearchTree.new
+
+    tree.insert(98, "Animals United")
+    tree.insert(58, "Armageddon")
+    tree.insert(36, "Bill & Ted's Bogus Journey")
+
+    assert_equal [98, 3, 100], tree.node_health(tree.root)
+  end
+
+  def test_health_returns_rating_and_child_count_and_floored_percentage_arrays_at_depth
     tree = BinarySearchTree.new
 
     tree.insert(98, "Animals United")
@@ -171,25 +201,40 @@ class BinarySearchTreeTest < Minitest::Test
     assert_equal tree.min, {"45 Movie"=>45}
 
     assert_equal tree.load("movies.txt"), 96
+    assert_equal tree.load("movies.txt"), 0
   end
 
-  def test_leaves_returns_the_number_of_leaves
+  def test_leaves_returns_one_if_tree_has_two_nodes
     tree = BinarySearchTree.new
 
     tree.insert(10, "10 Movie")
     tree.insert(100, "100 Movie")
+
+    assert_equal 1, tree.leaves
+  end
+
+  def test_leaves_returns_the_number_of_leaves_for_tree_three_plus_nodes
+    tree = BinarySearchTree.new
+
+    tree.insert(10, "10 Movie")
+    tree.insert(95, "95 Movie")
     tree.insert(3, "3 Movie")
     tree.insert(5, "5 Movie")
     tree.insert(1, "1 Movie")
 
     assert_equal 3, tree.leaves
+
+    tree.insert(90, "90 Movie")
+    tree.insert(100, "100 Movie")
+
+    assert_equal 4, tree.leaves
   end
 
-  def test_return_larger_returns_the_larger_of_two_integers
+  def test_return_largest_returns_the_largest_of_three_integers
     tree = BinarySearchTree.new
 
-    assert_equal 2, tree.return_larger(1, 2)
-    assert_equal 5, tree.return_larger(5, 2)
+    assert_equal 7, tree.return_largest(1, 2, 7)
+    assert_equal 9, tree.return_largest(5, 2, 9)
   end
 
   def test_height_returns_height_of_tree
