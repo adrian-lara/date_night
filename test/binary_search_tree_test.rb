@@ -10,13 +10,6 @@ class BinarySearchTreeTest < Minitest::Test
     assert_instance_of BinarySearchTree, tree
   end
 
-  def test_create_root_creates_new_root_node
-    tree = BinarySearchTree.new
-    tree.create_root(1, "Movie")
-
-    assert_instance_of Node, tree.root
-  end
-
   def test_insert_inserts_new_node_and_returns_depth
     tree = BinarySearchTree.new
 
@@ -29,8 +22,12 @@ class BinarySearchTreeTest < Minitest::Test
     assert_nil tree.insert(10, "10 Movie")
   end
 
+  def
+
   def test_include_checks_specific_node_existense
     tree = BinarySearchTree.new
+
+    refute tree.include?(10)
 
     tree.insert(10, "10 Movie")
     tree.insert(100, "100 Movie")
@@ -55,6 +52,8 @@ class BinarySearchTreeTest < Minitest::Test
   def test_depth_of_returns_depth_of_node
     tree = BinarySearchTree.new
 
+    assert_nil tree.depth_of(10)
+
     tree.insert(10, "10 Movie")
     tree.insert(100, "100 Movie")
     tree.insert(3, "3 Movie")
@@ -62,12 +61,12 @@ class BinarySearchTreeTest < Minitest::Test
     tree.insert(57, "57 Movie")
     tree.insert(65, "65 Movie")
 
-    assert_equal tree.depth_of(10), 0
-    assert_equal tree.depth_of(100), 1
-    assert_equal tree.depth_of(3), 1
-    assert_equal tree.depth_of(5), 2
-    assert_equal tree.depth_of(57), 2
-    assert_equal tree.depth_of(65), 3
+    assert_equal 0, tree.depth_of(10)
+    assert_equal 1, tree.depth_of(100)
+    assert_equal 1, tree.depth_of(3)
+    assert_equal 2, tree.depth_of(5)
+    assert_equal 2, tree.depth_of(57)
+    assert_equal 3, tree.depth_of(65)
 
     assert_nil tree.depth_of(1)
     assert_nil tree.depth_of(0)
@@ -97,7 +96,7 @@ class BinarySearchTreeTest < Minitest::Test
     tree.insert(57, "57 Movie")
     tree.insert(65, "65 Movie")
 
-    assert_equal tree.min, {"3 Movie"=>3}
+    assert_equal({"3 Movie"=>3}, tree.min)
   end
 
   def test_sort_returns_sorted_array_of_hashes
@@ -116,7 +115,7 @@ class BinarySearchTreeTest < Minitest::Test
   def test_load_returns_total_inserted_entries_of_file
     tree = BinarySearchTree.new
 
-    assert_equal tree.load("movies.txt"), 99
+    assert_equal 99, tree.load("movies.txt")
   end
 
   def test_count_children_counts_self_and_children
@@ -172,7 +171,6 @@ class BinarySearchTreeTest < Minitest::Test
     assert_equal tree.min, {"45 Movie"=>45}
 
     assert_equal tree.load("movies.txt"), 96
-    #write more tests
   end
 
   def test_leaves_returns_the_number_of_leaves
@@ -202,7 +200,7 @@ class BinarySearchTreeTest < Minitest::Test
     tree.insert(10, "10 Movie")
     assert_equal 1, tree.height
 
-    tree.insert(45, "100 Movie")
+    tree.insert(45, "45 Movie")
     assert_equal 2, tree.height
 
     tree.insert(3, "3 Movie")
@@ -214,11 +212,154 @@ class BinarySearchTreeTest < Minitest::Test
     tree.insert(50, "50 Movie")
     assert_equal 3, tree.height
 
-    tree.insert(55, "50 Movie")
+    tree.insert(55, "55 Movie")
     assert_equal 4, tree.height
 
-    tree.insert(52, "50 Movie")
+    tree.insert(52, "52 Movie")
     assert_equal 5, tree.height
+  end
+
+  def test_delete_returns_movie_rating
+    skip
+    tree = BinarySearchTree.new
+
+    tree.insert(50, "50 Movie")
+    tree.insert(10, "10 Movie")
+    tree.insert(60, "60 Movie")
+
+    assert_equal 50, tree.delete(50)
+  end
+
+  # def test_replace_can_replace_root_and_shifts_tree_to_keep_children
+  #   skip
+  #   tree = BinarySearchTree.new
+  #
+  #   tree.insert(50, "50 Movie")
+  #   tree.insert(10, "10 Movie")
+  #   tree.insert(60, "60 Movie")
+  #   tree.replace(50)
+  #
+  #   refute tree.include?(50)
+  #   assert tree.include?(10)
+  #   assert tree.include?(60)
+  # end
+  #
+  # def test_replace_can_delete_root_and_adjust_depths_as_expected
+  #   skip
+  #   tree = BinarySearchTree.new
+  #
+  #   tree.insert(50, "50 Movie")
+  #   tree.insert(10, "10 Movie")
+  #   tree.insert(60, "60 Movie")
+  #   tree.replace(50)
+  #
+  #   assert_equal tree.depth_of(10), 0
+  #   assert_equal tree.depth_of(60), 1
+  # end
+  #
+  # def test_delete_leaf_removes_a_leaf_of_simple_tree
+  #   skip
+  #   tree = BinarySearchTree.new
+  #
+  #   tree.insert(50, "50 Movie")
+  #   tree.insert(10, "10 Movie")
+  #   tree.insert(60, "60 Movie")
+  #   tree.delete_leaf(10)
+  #   tree.delete_leaf(60)
+  #
+  #   refute tree.include?(10)
+  #   assert tree.include?(50)
+  #   refute tree.include?(60)
+  # end
+
+  def test_delete_removes_a_leaf_of_simple_tree
+    skip
+    tree = BinarySearchTree.new
+
+    tree.insert(50, "50 Movie")
+    tree.insert(10, "10 Movie")
+    tree.insert(60, "60 Movie")
+    tree.delete(10)
+    tree.delete(60)
+    puts tree
+
+    refute tree.include?(10)
+    assert tree.include?(50)
+    refute tree.include?(60)
+  end
+
+  def test_find_node_returns_node_with_given_rating
+    tree = BinarySearchTree.new
+
+    tree.insert(50, "50 Movie")
+    tree.insert(10, "10 Movie")
+    tree.insert(60, "60 Movie")
+
+    assert_equal tree.find_node(10), tree.root.left
+  end
+
+  def test_delete_removes_a_node_from_the_tree_and_maintain_depths
+    tree = BinarySearchTree.new
+
+    tree.insert(5, "5 Movie")
+    tree.insert(2, "2 Movie")
+    tree.insert(1, "1 Movie")
+    tree.insert(3, "3 Movie")
+    tree.insert(8, "8 Movie")
+    tree.insert(7, "7 Movie")
+    tree.insert(10, "10 Movie")
+
+    assert_equal 3, tree.height
+    assert_equal 1, tree.depth_of(2)
+    assert_equal 2, tree.depth_of(1)
+    assert_equal 2, tree.depth_of(3)
+    assert_equal 1, tree.depth_of(8)
+    assert_equal 2, tree.depth_of(7)
+    assert_equal 2, tree.depth_of(10)
+
+    assert_equal 5, tree.delete(5)
+
+    refute tree.include?(5)
+    assert_equal 1, tree.depth_of(2)
+    assert_equal 2, tree.depth_of(1)
+    assert_equal 0, tree.depth_of(3)
+    assert_equal 1, tree.depth_of(8)
+    assert_equal 2, tree.depth_of(7)
+    assert_equal 2, tree.depth_of(10)
+
+    assert_equal 8, tree.delete(8)
+
+    refute tree.include?(8)
+    assert_equal 1, tree.depth_of(2)
+    assert_equal 2, tree.depth_of(1)
+    assert_equal 0, tree.depth_of(3)
+    assert_equal 1, tree.depth_of(7)
+    assert_equal 2, tree.depth_of(10)
+  end
+
+  def test_delete_removes_nodes_and_can_be_reflected_in_height
+    skip
+    tree = BinarySearchTree.new
+
+    tree.insert(10, "10 Movie")
+    tree.insert(50, "50 Movie")
+    tree.insert(45, "45 Movie")
+    assert_equal 3, tree.height
+    assert_equal 2, tree.depth_of(45)
+
+    assert_equal 50, tree.delete(50)
+
+    refute tree.include?(50)
+    assert_equal 1, tree.depth_of(45)
+    assert_equal 2, tree.height
+
+    assert_equal 45, tree.delete(45)
+
+    refute tree.include?(45)
+    assert_equal 1, tree.height
+
+    assert_equal 10, tree.delete(10)
+    assert_equal 0, tree.height
   end
 
 end
